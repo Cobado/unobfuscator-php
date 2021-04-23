@@ -1,8 +1,12 @@
 # PHP Unobfuscator
 
+Simple CLI PHP application for unobfuscate php code.
+
 ## Quick start
 
 ```console
 
-php -f unobfuscator.php obfuscated-php-file.php
+composer dump-autoload
+./unobfuscator help
+./unobfuscator decode [ your-file ]
 
