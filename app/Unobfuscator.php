@@ -8,6 +8,8 @@ class Unobfuscator
 {
     protected $printer;
 
+    protected $registry = [];
+
     public function __construct()
     {
         $this->printer = new CliPrinter();
@@ -17,19 +19,45 @@ class Unobfuscator
     {
         return $this->printer;
     }
+
+    public function registerCommand($name, $callable)
+    {
+        $this->registry[$name] = $callable;
+    }
+
+    public function getCommand($command)
+    {
+        return isset($this->registry[$command]) ? $this->registry[$command] : null;
+    }
     
     public function runCommand(array $argv)
     {
+        $command_name = "help";
+
         if (isset($argv[1])) {
-            $filename = $argv[1];
+            $command_name = $argv[1];
         }
 
-        $file_content = file_get_contents($filename);
-        $result = decodeContent($file_content);
+        $command = $this->getCommand($command_name);
 
-        $code = eval($result);
+        if ($command === null) {
+            $this->getPrinter()->display("ERROR: Command \"$command_name\" not found.");
+            exit;
+        }
 
-        $this->getPrinter()->display($code);
+        call_user_func($command, $argv);
+    }
+
+    public function decode($filename)
+    {
+        if (isset($filename)) {
+            $file_content = file_get_contents($filename);
+            $result = $this->decodeContent($file_content);
+
+            $code = eval($result);
+
+            $this->getPrinter()->display($code);
+        }
     }
 
     public function decodeContent(string $content)

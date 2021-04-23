@@ -11,4 +11,16 @@ require __DIR__ . '/vendor/autoload.php';
 use App\Unobfuscator;
 
 $unobfuscator = new Unobfuscator();
+
+$unobfuscator->registerCommand('decode', function (array $argv) use ($unobfuscator) {
+   $filename = isset($argv[2]) ? $argv[2] : "File not found";
+   $unobfuscator->decode($filename);
+});
+
+$unobfuscator->registerCommand('help', function (array $argv) use ($unobfuscator) {
+    $unobfuscator->getPrinter()->display("usage: ./unobfuscator decode [ your-file ]");
+});
+
+
 $unobfuscator->runCommand($argv);
+
