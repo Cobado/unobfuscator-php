@@ -6,7 +6,9 @@ Simple CLI PHP application for unobfuscate php code.
 
 ```console
 
-composer dump-autoload
-./unobfuscator help
-./unobfuscator decode [ your-file ]
+$ composer dump-autoload
+$ ./unobfuscator help
+$ ./unobfuscator decode [ your-file ]
+
+```
 
